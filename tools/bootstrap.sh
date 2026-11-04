@@ -35,22 +35,25 @@ check_proj() {
   mkdir -p "$TMP/projects/$p"/{logs,ckpt,tb}
   ok "工作区 $TMP/projects/$p/{logs,ckpt,tb}"
 
-  # 代码目录与 commit
-  while IFS= read -r line; do
-    local path commit
-    path=$(echo "$line" | sed -n 's/.*path:[[:space:]]*\([^,]*\)/\1/p')
-    commit=$(echo "$line" | sed -n 's/.*commit:[[:space:]]*\([^, ]*\).*/\1/p')
+  # 代码目录与 commit:按 "- path:" 条目配对读取
+  while read -r path commit origin; do
     [[ -n "$path" ]] || continue
     if [[ -d "$path" ]]; then
       local cur; cur=$(git -C "$path" rev-parse HEAD 2>/dev/null || echo "no-git")
-      if [[ "$cur" == "$commit" ]]; then ok "code $path @ ${commit:0:8}"
+      if [[ -z "$commit" || "$commit" == "n/a" ]]; then
+        ok "code $path @ ${cur:0:8}(manifest 未记录 commit)"
+      elif [[ "$cur" == "$commit" ]]; then ok "code $path @ ${commit:0:8}"
       elif [[ "$cur" == "no-git" ]]; then warn "code $path 存在但不是 git 仓库"
       else warn "code $path 在 ${cur:0:8},manifest 记录 ${commit:0:8}(不一致)"
       fi
     else
-      bad "code 缺失: $path  (origin: $(echo "$line" | sed -n 's/.*origin:[[:space:]]*\([^ ,]*\).*/\1/p'))"
+      bad "code 缺失: $path  (origin: $origin)"
     fi
-  done < <(sed -n '/^code:/,/^env:/p' "$m" | grep -E 'path:|commit:')
+  done < <(awk '
+    /^  - path:/   {p=$3; c=""; o=""}
+    /^    origin:/ {o=$2}
+    /^    commit:/ {c=$2; print p, c, o}
+  ' "$m")
 
   # venv
   local venv; venv=$(yaml_get "$m" "venv")

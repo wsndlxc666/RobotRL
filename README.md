@@ -2,6 +2,9 @@
 
 机器人学习实验的**唯一真相**。盘上的目录、GitHub 上的仓库、以及每个实验的报告都从这里出发。
 
+- 远程仓库:https://github.com/wsndlxc666/RobotRL
+- 本地仓库:`/autodl-fs/data/lab`(跨实例持久)
+
 ## 这里放什么
 
 | 放进来 | 不放进来 |

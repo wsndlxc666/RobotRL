@@ -24,7 +24,7 @@ cmd_ls() {
     local p; p=$(basename "$d")
     local st upd obj
     st=$(grep -m1 '^status:' "$d/manifest.yaml" 2>/dev/null | sed 's/status:[[:space:]]*//' || echo "-")
-    upd=$(grep -m1 '更新时间' "$d/STATUS.md" 2>/dev/null | sed 's/.*: *//' || echo "-")
+    upd=$(grep -m1 '更新时间' "$d/STATUS.md" 2>/dev/null | sed -E 's/.*更新时间\**[:：]?[[:space:]]*//' | cut -c1-10 || echo "-")
     obj=$(sed -n '/^objective:/,/^[a-z_]*:/p' "$d/manifest.yaml" 2>/dev/null | sed -n '2p' | sed 's/^[[:space:]]*//' | cut -c1-45)
     printf "%-16s %-10s %-45s %s\n" "$p" "$st" "$upd" "$obj"
   done
@@ -112,8 +112,8 @@ cmd_sync() {
 cmd_where() {
   valid_proj "$1"
   echo "=== $1 ==="
-  sed -n '/^code:/,/^env:/p' "$PROJ_ROOT/$1/manifest.yaml"
-  sed -n '/^env:/,/^models:/p' "$PROJ_ROOT/$1/manifest.yaml"
+  sed -n '/^code:/,/^env:/p' "$PROJ_ROOT/$1/manifest.yaml" | sed '$d'
+  sed -n '/^env:/,/^models:/p' "$PROJ_ROOT/$1/manifest.yaml" | sed '$d'
 }
 
 cmd="${1:-}"; shift || true
