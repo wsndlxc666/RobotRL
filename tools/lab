@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+# lab — 实验档案库的统一入口
+# 用法:
+#   lab ls
+#   lab status <proj>
+#   lab today <proj> "今天的目标"
+#   lab run-new <proj> <stage> <tag>
+#   lab sync ["commit message"]
+#   lab where <proj>
+set -euo pipefail
+
+LAB_ROOT="${LAB_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+PROJ_ROOT="$LAB_ROOT/projects"
+
+die() { echo "lab: $*" >&2; exit 1; }
+
+valid_proj() {
+  [[ -d "$PROJ_ROOT/$1" ]] || die "未知项目 '$1'(可用: $(ls "$PROJ_ROOT" | tr '\n' ' '))"
+}
+
+cmd_ls() {
+  printf "%-16s %-10s %-45s %s\n" "PROJECT" "STATUS" "UPDATED" "OBJECTIVE"
+  for d in "$PROJ_ROOT"/*/; do
+    local p; p=$(basename "$d")
+    local st upd obj
+    st=$(grep -m1 '^status:' "$d/manifest.yaml" 2>/dev/null | sed 's/status:[[:space:]]*//' || echo "-")
+    upd=$(grep -m1 '更新时间' "$d/STATUS.md" 2>/dev/null | sed 's/.*: *//' || echo "-")
+    obj=$(sed -n '/^objective:/,/^[a-z_]*:/p' "$d/manifest.yaml" 2>/dev/null | sed -n '2p' | sed 's/^[[:space:]]*//' | cut -c1-45)
+    printf "%-16s %-10s %-45s %s\n" "$p" "$st" "$upd" "$obj"
+  done
+}
+
+cmd_status() {
+  valid_proj "$1"
+  cat "$PROJ_ROOT/$1/STATUS.md"
+}
+
+cmd_today() {
+  local p="$1"; shift
+  valid_proj "$p"
+  local goal="${*:-未填写目标}"
+  local log="$PROJ_ROOT/$p/LOG.md"
+  local date; date=$(date +%F)
+  # 如果当天已有条目,提示但不阻断
+  if grep -q "^## $date" "$log"; then
+    echo "lab: $date 已有一条记录,将追加为第二条" >&2
+  fi
+  cat >> "$log" <<EOF
+
+---
+
+## $date — $goal
+
+**目标**: $goal
+**计划**:
+- [ ] 
+**实际**:
+- 
+**结论**:
+**产出**:
+**下一步**:
+EOF
+  echo "已追加到 $log"
+  echo "提示: 收工时记得覆盖 STATUS.md,再执行 lab sync"
+}
+
+cmd_run_new() {
+  local p="$1" stage="$2" tag="$3"
+  valid_proj "$p"
+  local id; id="$(date +%Y%m%d)_${stage}_${tag}"
+  local dir="$PROJ_ROOT/$p/runs/$id"
+  [[ -e "$dir" ]] && die "已存在: $dir"
+  mkdir -p "$dir/raw" "$dir/figures"
+  touch "$dir/raw/.gitkeep" "$dir/figures/.gitkeep"
+  cat > "$dir/artifacts.yaml" <<EOF
+# 大文件占位。不提交实体文件,只记录位置与校验。
+run_id: $id
+created: $(date -Iseconds)
+artifacts: []
+# 示例:
+#   - name: ckpt_step500
+#     path: /autodl-fs/data/artifacts/$p/runs/$id/ckpt_step500
+#     size: 6.4G
+#     sha256: <hash>
+EOF
+  cat > "$dir/config.yaml" <<EOF
+# 本次实验的完整实参快照(由 run_with_report.sh 自动填充,或手工粘贴)
+run_id: $id
+command: ""
+overrides: {}
+EOF
+  echo "{\"run_id\":\"$id\",\"status\":\"pending\"}" > "$dir/metrics.json"
+  echo "$dir"
+}
+
+cmd_sync() {
+  local msg="${1:-update: $(date -Iseconds)}"
+  cd "$LAB_ROOT"
+  git add -A
+  if git diff --cached --quiet; then
+    echo "lab: 没有变更"
+    return 0
+  fi
+  git commit -q -m "$msg"
+  if git remote get-url origin >/dev/null 2>&1; then
+    git push -q origin HEAD && echo "已推送: $(git log -1 --oneline)"
+  else
+    echo "已提交(未配置 remote,未推送): $(git log -1 --oneline)"
+  fi
+}
+
+cmd_where() {
+  valid_proj "$1"
+  echo "=== $1 ==="
+  sed -n '/^code:/,/^env:/p' "$PROJ_ROOT/$1/manifest.yaml"
+  sed -n '/^env:/,/^models:/p' "$PROJ_ROOT/$1/manifest.yaml"
+}
+
+cmd="${1:-}"; shift || true
+case "$cmd" in
+  ls)       cmd_ls ;;
+  status)   cmd_status "${1:?usage: lab status <proj>}" ;;
+  today)    cmd_today "${1:?usage: lab today <proj> \"目标\"}" "${@:2}" ;;
+  run-new)  cmd_run_new "${1:?}" "${2:?usage: lab run-new <proj> <stage> <tag>}" "${3:?}" ;;
+  sync)     cmd_sync "${1:-}" ;;
+  where)    cmd_where "${1:?usage: lab where <proj>}" ;;
+  *)        sed -n '2,10p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//' ;;
+esac

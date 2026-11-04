@@ -1,0 +1,37 @@
+# ===== 大文件与产物一律不进库 =====
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.onnx
+*.npz
+*.mp4
+*.avi
+*.zip
+*.tar
+*.tar.gz
+*.tar.xz
+*.tgz
+
+# ===== 目录级排除 =====
+assets/
+data/
+videos/
+frames/
+raw/
+checkpoints/
+tb/
+__pycache__/
+*.egg-info/
+.ipynb_checkpoints/
+.venv*/
+*.pyc
+
+# ===== 日志:原始日志留在盘上,只把摘要写进 REPORT.md =====
+*.log
+
+# ===== 例外:保留空目录骨架与占位说明 =====
+!**/.gitkeep
+!**/artifacts.yaml
+!**/*.placeholder.md

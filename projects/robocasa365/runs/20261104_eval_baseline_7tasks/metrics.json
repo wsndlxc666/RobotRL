@@ -1,0 +1,20 @@
+{
+  "run_id": "20261104_eval_baseline_7tasks",
+  "project": "robocasa365",
+  "stage": "eval",
+  "date": "2026-11-04",
+  "model": "pi05_pretrain_human300-75k",
+  "horizon_source": "task_horizon",
+  "max_steps_per_rollout_epoch": 1500,
+  "results": [
+    {"task": "PickPlaceCounterToCabinet", "n": 6,  "success_once": 1.0,    "flag": "suspect_too_easy_or_leak"},
+    {"task": "SlideDishwasherRack",      "n": 6,  "success_once": 1.0,    "flag": "suspect_too_easy_or_leak"},
+    {"task": "OpenDrawer",               "n": 48, "success_once": 0.1667, "flag": "conflicts_with_n12_0.4167"},
+    {"task": "OpenDrawer",               "n": 12, "success_once": 0.4167, "flag": "conflicts_with_n48_0.1667"},
+    {"task": "PickPlaceDrawerToCounter", "n": 6,  "success_once": 0.1667, "flag": "small_sample"},
+    {"task": "CloseToasterOvenDoor",     "n": 6,  "success_once": 0.0,    "flag": "small_sample"},
+    {"task": "CoffeeSetupMug",           "n": 6,  "success_once": 0.0,    "flag": "small_sample"},
+    {"task": "TurnOnMicrowave",          "n": 6,  "success_once": 0.0,    "flag": "small_sample"}
+  ],
+  "verdict": "baseline 不可用于对比,需统一口径并提高 n"
+}

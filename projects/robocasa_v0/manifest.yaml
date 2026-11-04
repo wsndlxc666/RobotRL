@@ -1,0 +1,57 @@
+schema: 1
+name: robocasa_v0
+status: paused
+
+objective: >
+  在 RoboCasa v0(robocasa 0.2.0 / RLinf fork)上,以 pi0.5 为策略、
+  用 FlowSDE(flow-matching SDE 采样 + RL 微调)提升任务成功率,
+  先以 CloseDrawer 为验证任务。
+
+code:
+  - path: /root/autodl-tmp/RLinf
+    origin: https://github.com/RLinf/RLinf
+    commit: 0067f7d5ce525c18bda439ed8dbb638abafd6a06
+  - path: /root/autodl-tmp/RLinf/.venv-robocasa/robocasa
+    origin: https://github.com/RLinf/robocasa
+    commit: 25dfb050a21d080ddbe52b6823545850eab14367
+    note: >
+      警告:v0 的 robocasa 源码以 editable 装在 venv 目录内部(8.2G),
+      不在 code/ 下。迁移计划见 STATUS.md 的遗留项。
+
+env:
+  venv: /root/autodl-tmp/RLinf/.venv-robocasa
+  python: "3.11"
+  package: robocasa 0.2.0 (editable)
+  rebuild: projects/robocasa_v0/run/00_setup_env.sh
+
+models:
+  - name: pi05_robocasa_100demos_s30000
+    path: /autodl-fs/data/robocasa/models/pi05_robocasa_100demos_s30000
+    role: policy
+  - name: flow_sde_step90
+    path: /autodl-fs/data/robocasa/ckpt/flow_sde_step90
+    role: result_ckpt
+
+data:
+  - name: robocasa_assets_zip
+    path: /root/autodl-tmp/robocasa_rl/assets_dl
+    size: 3.9G
+    note: 与 robocasa365 的 assets 内容重叠,已解压进 .venv-robocasa/robocasa
+  - name: robocasa_assets_legacy
+    path: /root/autodl-tmp/robocasa_rl/assets_legacy/archives
+    size: 3.5G
+    note: 旧版本 zip,待确认后可删
+
+entrypoints:
+  setup: projects/robocasa_v0/run/00_setup_env.sh
+  train: projects/robocasa_v0/run/10_train.sh
+  eval: projects/robocasa_v0/run/20_eval_ckpt.sh
+  eval_all: projects/robocasa_v0/run/21_eval_all.sh
+  readme: projects/robocasa_v0/run/README.md
+
+artifacts:
+  root: /autodl-fs/data/robocasa
+  planned_root: /autodl-fs/data/artifacts/robocasa_v0
+  big_file_threshold: 50MB
+
+runs: []
