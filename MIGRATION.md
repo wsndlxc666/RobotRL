@@ -55,3 +55,21 @@
 | editable 包记录的是绝对路径 | 脚本会重新 `pip install -e . --no-deps` |
 | v0 源码从 `.venv-robocasa/robocasa` 搬出后 robocasa 导入失败 | 重新 editable 安装;失败则把 `code/robocasa_v0` 移回并回滚 |
 | `_downloads/*.zip` 与解压内容重复 11G | 迁移后单独确认删除 |
+
+## 关机流程
+
+全部做完后关实例:
+
+```bash
+tools/shutdown_if_done.sh --yes
+```
+
+它会:
+
+1. 跑 `finalize.sh`(迁移 → 体检 → 归档日志 → 提交推送),失败即停;
+2. 确认本地没有未推送的提交、`/autodl-fs/data/{lab,artifacts}` 都在、无训练进程;
+3. 5 秒倒计时后调用 `/usr/bin/shutdown`(AutoDL 的关机脚本,会停掉 supervisord)。
+
+**关机前必须成立的条件**:所有产物已在 `/autodl-fs/data`(持久)和 GitHub 上。
+`/root/autodl-tmp` 是实例本地盘,关机后可能被重置,不能作为唯一存放点。
+
