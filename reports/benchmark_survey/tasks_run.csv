@@ -1,0 +1,10 @@
+benchmark,task,suite,horizon_steps,demo_median_steps,action_dim,state_dim,cameras,img_res,action_horizon,num_action_chunks,decision_points,num_subtasks,success_conditions,objects,scene_space,robot,mobile,control_hz,episode_seconds,capability_tags,eval_n,note
+LIBERO-10,Task0 alphabet_soup+tomato_sauce->basket,libero_10,520,,7,8,2,256->224,10,10,52,1,2,8 + 1 fixture,1 layout x 50 init states,Panda (fixed base),False,20,26.0,pick-place;multi-object;sequencing,60,RECAP: 0.0->0.217->0.433
+RoboCasa v0.2,CloseDrawer,single_stage,300,,12,25->16,2,224,50,5,60,1,1,2-4,10 layouts x 12 styles = 120,PandaOmron,True,20,15.0,close;articulation,50,FlowSDE: 0.20->0.46; success 75-295 steps
+RoboCasa365,OpenDrawer,atomic_seen,750,480,12,25->16,3 sites / 2 used,224,50,5,150,1,1,1-4,2500 pretrain combos,PandaOmron,True,20,37.5,open;articulation,50,0.20 SFT; train cap 600
+RoboCasa365,PickPlaceCounterToCabinet,atomic_seen,750,440,12,25->16,3 sites / 2 used,224,50,5,150,1,2,1-4,2500 pretrain combos,PandaOmron,True,20,37.5,pick-place,6,"n=6, success 1.0"
+RoboCasa365,PickPlaceDrawerToCounter,atomic_seen,750,300,12,25->16,3 sites / 2 used,224,50,5,150,1,2,1-4,2500 pretrain combos,PandaOmron,True,20,37.5,pick-place;mobile-base,6,"n=6, 0.167"
+RoboCasa365,SlideDishwasherRack,atomic_seen,450,180,12,25->16,3 sites / 2 used,224,50,5,90,1,1,1-4,2500 pretrain combos,PandaOmron,True,20,22.5,slide;articulation,6,"n=6, 1.0"
+RoboCasa365,TurnOnMicrowave,atomic_seen,450,460,12,25->16,3 sites / 2 used,224,50,5,90,1,2,1-4,2500 pretrain combos,PandaOmron,True,20,22.5,press/turn-on,6,horizon < demo median
+RoboCasa365,CloseToasterOvenDoor,atomic_seen,450,240,12,25->16,3 sites / 2 used,224,50,5,90,1,1,1-4,2500 pretrain combos,PandaOmron,True,20,22.5,close;articulation,6,"n=6, 0.0"
+RoboCasa365,CoffeeSetupMug,atomic_seen,600,620,12,25->16,3 sites / 2 used,224,50,5,120,1,2,1-4,2500 pretrain combos,PandaOmron,True,20,30.0,pick-place;pour/serve,6,horizon < demo median

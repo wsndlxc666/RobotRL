@@ -23,6 +23,12 @@
 | [robocasa_v0](projects/robocasa_v0/PLAN.md) | paused | FlowSDE 在 RoboCasa v0 上提升成功率 | [报告](projects/robocasa_v0/runs/) |
 | [robocasa365](projects/robocasa365/PLAN.md) | active | pi0.5 在 RoboCasa365 上跑通并评测 | [报告](projects/robocasa365/runs/) |
 
+## 分析报告
+
+| 报告 | 内容 | 日期 |
+|---|---|---|
+| [benchmark_survey](reports/benchmark_survey/REPORT.md) | LIBERO / RoboCasa v0.2 / RoboCasa365 的任务规模、episode 长度、决策点、能力覆盖对比;含全量任务池 CSV | 2026-11-05 |
+
 ## 每个项目的三个文件
 
 - **PLAN.md** — 长期计划:目标、方案、阶段、里程碑。改它 = 改方向。
