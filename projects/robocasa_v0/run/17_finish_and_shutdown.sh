@@ -41,7 +41,7 @@ if [ ! -f "$FN120_JSON" ]; then
 fi
 
 echo "[finish] regenerating figures $(date)"
-/root/autodl-tmp/RLinf/.venv-robocasa/bin/python "$RC/report/make_compare_figures.py" \
+/root/autodl-tmp/code/RLinf/.venv-robocasa/bin/python "$RC/report/make_compare_figures.py" \
   > "$RC/logs/make_figures.log" 2>&1
 cat "$RC/logs/make_figures.log"
 

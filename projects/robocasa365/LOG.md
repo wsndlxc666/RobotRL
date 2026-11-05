@@ -37,3 +37,33 @@
 **实际**: 训练已启动,`robocasa365_flowsde_opendrawer_pi05`;critic 正在学习(explained_variance 仍为负)
 **结论**: 待训练收敛后判断
 **下一步**: 训练结束 → exp-report 出报告 → 评测
+
+---
+
+## 2026-11-04 23:00 → 2026-11-05 05:50 — FlowSDE 训练(120 步)
+
+**目标**: 在 OpenDrawer 上跑通 FlowSDE 在线微调,看是否高于 baseline
+**计划**: ① 120 步训练 ② 每 10 步内置评测 ③ 每 20 步存 ckpt
+**实际**:
+- 119 次迭代完成,第 120 步存 ckpt 时崩溃
+- **原因:磁盘写满**(6 个 16G ckpt 占满 150G,只剩 200K),step_120 只写了一半
+- eval(n=10):0.4,0.3,0.7,0.4,0.5,0.5,0.5,0.7,0.4,0.3,0.3,0.8
+- 训练成功率(8 env)均值 0.466,无趋势
+- critic explained_variance -6.62 → 0.76;actor ratio_abs ~0.026
+**结论**: 训练流程跑通,但结果不可用——末次 0.8 是 n=10 的噪声,策略几乎没更新
+**产出**: `runs/20261104_train_flowsde_opendrawer_pi05/`
+**下一步**: 用统一口径(n≥48)复评 step_100;修 ckpt 保存策略
+
+---
+
+## 2026-11-05 — 目录结构统一
+
+**目标**: 把两块盘整理成统一结构,并把档案同步到 GitHub
+**计划**: ① fs 建 artifacts 分层 ② tmp 建 code/projects/cache ③ 修 venv ④ 改路径 ⑤ 验证
+**实际**:
+- `migrate_layout.sh --apply` 执行成功,4 个 import 全部通过
+- 共用权重抽到 `artifacts/shared/models/`
+- 旧路径全部留软链
+**结论**: 结构统一完成,`/root/autodl-tmp` 根目录只剩 code/projects/cache
+**产出**: `https://github.com/wsndlxc666/RobotRL`
+**下一步**: 下次开机先跑 `tools/bootstrap.sh all`

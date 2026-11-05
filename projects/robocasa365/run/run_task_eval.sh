@@ -2,12 +2,12 @@
 # usage: run_task_eval.sh <task> <num_envs> <tag>
 set -u
 TASK="$1"; N="${2:-6}"; TAG="${3:-$TASK}"
-cd /root/autodl-tmp/RLinf
+cd /root/autodl-tmp/code/RLinf
 source .venv-robocasa365/bin/activate
 export MUJOCO_GL=egl PYOPENGL_PLATFORM=egl NUMBA_DISABLE_JIT=1
-export REPO_PATH=/root/autodl-tmp/RLinf
-export EVALUATIONS_PATH=/root/autodl-tmp/RLinf/evaluations
-export EMBODIED_PATH=/root/autodl-tmp/RLinf/examples/embodiment
+export REPO_PATH=/root/autodl-tmp/code/RLinf
+export EVALUATIONS_PATH=/root/autodl-tmp/code/RLinf/evaluations
+export EMBODIED_PATH=/root/autodl-tmp/code/RLinf/examples/embodiment
 bash evaluations/run_eval.sh robocasa365 robocasa365_eval_pi05 \
   env.eval.total_num_envs="$N" \
   "env.eval.task_filter=[\"$TASK\"]" \

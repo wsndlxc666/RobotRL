@@ -15,9 +15,9 @@
 ## 必需环境变量
 
 ```bash
-export ROBOCASA_PATH=/root/autodl-tmp/robocasa365
-export ROBOCASA_ASSETS_PATH=/autodl-fs/data/robocasa365_assets
-export REPO_PATH=/root/autodl-tmp/RLinf
+export ROBOCASA_PATH=/root/autodl-tmp/code/robocasa365
+export ROBOCASA_ASSETS_PATH=/autodl-fs/data/artifacts/robocasa365/data/assets
+export REPO_PATH=/root/autodl-tmp/code/RLinf
 export MUJOCO_GL=egl
 export PYOPENGL_PLATFORM=egl
 export NUMBA_DISABLE_JIT=1

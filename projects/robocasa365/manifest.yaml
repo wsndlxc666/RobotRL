@@ -7,43 +7,43 @@ objective: >
   建立 baseline,再推进到 FlowSDE 在线微调。
 
 code:
-  - path: /root/autodl-tmp/RLinf
+  - path: /root/autodl-tmp/code/RLinf
     origin: https://github.com/RLinf/RLinf
     commit: 0067f7d5ce525c18bda439ed8dbb638abafd6a06
-  - path: /root/autodl-tmp/robocasa365
+  - path: /root/autodl-tmp/code/robocasa365
     origin: https://github.com/robocasa/robocasa
     commit: 3443cdf3dd20f9ae8ed41adba442059b506891d0
     package: robocasa 1.0.1 (editable)
-  - path: /root/autodl-tmp/robosuite_master
+  - path: /root/autodl-tmp/code/robosuite_master
     origin: https://github.com/ARISE-Initiative/robosuite
     commit: 5ce6643f3092639d08f7b0f90ed1c6a84f50552c
     note: 365 需要 master 版 robosuite
 
 env:
-  venv: /root/autodl-tmp/RLinf/.venv-robocasa365
+  venv: /root/autodl-tmp/code/RLinf/.venv-robocasa365
   python: "3.11"
   rebuild: projects/robocasa365/run/install.sh
   required_env:
-    ROBOCASA_PATH: /root/autodl-tmp/robocasa365
-    ROBOCASA_ASSETS_PATH: /autodl-fs/data/robocasa365_assets
+    ROBOCASA_PATH: /root/autodl-tmp/code/robocasa365
+    ROBOCASA_ASSETS_PATH: /autodl-fs/data/artifacts/robocasa365/data/assets
     MUJOCO_GL: egl
     PYOPENGL_PLATFORM: egl
     NUMBA_DISABLE_JIT: "1"
 
 models:
   - name: pi05_pretrain_human300_75k
-    path: /autodl-fs/data/robocasa365/models/pi05_pretrain_human300
+    path: /autodl-fs/data/artifacts/robocasa365/models/pi05_pretrain_human300
     role: policy
     source: hf://robocasa/robocasa365_checkpoints
     note: multitask_learning/75000
   - name: pi05_robocasa365_openpi
-    path: /autodl-fs/data/robocasa365/models/pi05_robocasa365_openpi
+    path: /autodl-fs/data/artifacts/robocasa365/models/pi05_robocasa365_openpi
     role: policy
     source: hf://robocasa/robocasa365_checkpoints
 
 data:
   - name: robocasa365_assets
-    path: /autodl-fs/data/robocasa365_assets
+    path: /autodl-fs/data/artifacts/robocasa365/data/assets
     size: 34G
     env: ROBOCASA_ASSETS_PATH
     source: hf://robocasa/robocasa-assets + hf://nvidia/PhysicalAI-Robotics-Manipulation-Objects-Kitchen-MJCF
@@ -66,8 +66,15 @@ eval_tasks:
   - CoffeeSetupMug
 
 artifacts:
-  root: /autodl-fs/data/robocasa365
-  planned_root: /autodl-fs/data/artifacts/robocasa365
+  root: /autodl-fs/data/artifacts/robocasa365
   big_file_threshold: 50MB
 
-runs: []
+runs:
+  - id: 20261104_eval_baseline_7tasks
+    stage: eval
+    date: 2026-11-04
+    headline: 7 任务 baseline,方差极大,不可用于对比
+  - id: 20261104_train_flowsde_opendrawer_pi05
+    stage: train
+    date: 2026-11-04
+    headline: 120 步 FlowSDE 训练完成,末尾 ckpt 因爆盘损坏;eval n=10 不足以判断提升

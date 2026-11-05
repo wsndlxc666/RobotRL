@@ -30,7 +30,7 @@
 
 | 项 | 值 |
 |---|---|
-| Python | 3.11.14（UV venv：`/root/autodl-tmp/RLinf/.venv`，约 13G） |
+| Python | 3.11.14（UV venv：`/root/autodl-tmp/code/RLinf/.venv`，约 13G） |
 | torch | 2.11.0+cu130（PyPI，驱动 580 支持 CUDA 13） |
 | jax / flax | 0.5.3 / flash-attn 2.8.3 |
 | openpi | `rlinf-openpi==0.1.1`（RLinf 的 PyTorch 重实现） |
@@ -119,7 +119,7 @@ RECAP = *RL with Experience and Corrections via Advantage-conditioned Policies*�
 
 ```bash
 # 环境
-source /root/autodl-tmp/recap/env.sh && cd /root/autodl-tmp/RLinf && source .venv/bin/activate
+source /root/autodl-tmp/recap/env.sh && cd /root/autodl-tmp/code/RLinf && source .venv/bin/activate
 
 # RECAP 四步
 bash /root/autodl-tmp/recap/run/1_returns.sh          # Step1 Compute Returns

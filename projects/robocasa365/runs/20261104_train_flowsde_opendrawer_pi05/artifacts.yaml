@@ -1,0 +1,35 @@
+# 大文件占位。实体不入库,只记录位置与校验。
+run_id: 20261104_train_flowsde_opendrawer_pi05
+created: 2026-11-05T09:15:00+08:00
+
+artifacts:
+  - name: global_step_100_full_weights
+    path: /autodl-fs/data/artifacts/robocasa365/ckpt/global_step_100/model_state_dict/full_weights.pt
+    size: 6.5G
+    note: 最后一个完整可用的策略权重(step_100 对应 eval step 99,success 0.3)
+  - name: global_step_20_full
+    path: /autodl-fs/data/artifacts/robocasa365/ckpt/global_step_20
+    size: 16G
+    note: 完整 ckpt(distcp + full_weights),磁盘告急时移出
+  - name: global_step_40_full
+    path: /autodl-fs/data/artifacts/robocasa365/ckpt/global_step_40
+    size: 16G
+    note: 完整 ckpt(distcp + full_weights),磁盘告急时移出
+  - name: global_step_60_80_100_fsdp
+    path: /root/autodl-tmp/projects/robocasa365/logs/20261104-23:00:07-robocasa365_flowsde_opendrawer_pi05/robocasa365_flowsde_opendrawer_pi05/checkpoints/
+    size: 48G
+    note: 仅在本地快盘,关机后可能丢失;只保留 distcp 用于续训
+  - name: step_120_corrupt
+    path: (已删除)
+    note: 磁盘写满导致 torch.save 失败,只有残缺 distcp,不可用
+
+reclaimable:
+  - path: /autodl-fs/data/artifacts/robocasa365/data/assets/_downloads
+    size: 11G
+    note: 解压后的源 zip,可删
+  - path: /autodl-fs/data/artifacts/robocasa365/data/assets/_downloads_lw
+    size: 1.3G
+    note: 同上
+  - path: /autodl-fs/data/artifacts/robocasa_v0/data/assets_zips
+    size: 7.4G
+    note: 与 robocasa365 资产重叠的旧 zip

@@ -8,7 +8,7 @@
 ## 方案
 
 1. 用 RLinf 的 `.venv-robocasa365` + robocasa 1.0.1 + robosuite master
-2. 资产走 `ROBOCASA_ASSETS_PATH` 指向 `/autodl-fs/data/robocasa365_assets`
+2. 资产走 `ROBOCASA_ASSETS_PATH` 指向 `/autodl-fs/data/artifacts/robocasa365/data/assets`
 3. 权重用 `pi05_pretrain_human300`(75000 步多任务预训练)
 4. 评测通过 `evaluations/run_eval.sh robocasa365 robocasa365_eval_pi05`,逐任务过滤
 5. baseline 稳定后,切 FlowSDE 在线训练(`robocasa365_flowsde_*`)

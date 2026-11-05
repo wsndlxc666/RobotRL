@@ -16,7 +16,7 @@
 |---|---|
 | 代码 | RLinf @ `0067f7d5`;robocasa365 @ `3443cdf3`;robosuite @ `5ce6643f` |
 | 权重 | `pi05_pretrain_human300` / multitask_learning/75000 |
-| 资产 | `/autodl-fs/data/robocasa365_assets` |
+| 资产 | `/autodl-fs/data/artifacts/robocasa365/data/assets` |
 | 任务 | OpenDrawer, PickPlaceCounterToCabinet, PickPlaceDrawerToCounter, SlideDishwasherRack, TurnOnMicrowave, CloseToasterOvenDoor, CoffeeSetupMug |
 | n | 每任务 6;OpenDrawer 另测 48 |
 | 环境 | `.venv-robocasa365`;`MUJOCO_GL=egl`;`NUMBA_DISABLE_JIT=1` |

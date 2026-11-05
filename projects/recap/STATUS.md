@@ -20,7 +20,7 @@
 ## 已完成
 
 - 四步流水线全部产出 parquet / checkpoint
-- 权重落在 `/autodl-fs/data/recap/models`(recap_task0_step300~1200、recap_fromsft_step900~1500)
+- 权重落在 `/autodl-fs/data/artifacts/recap/models`(recap_task0_step300~1200、recap_fromsft_step900~1500)
 - 报告:历史完整报告见 `/autodl-fs/data/recap/report/REPORT.md`
 
 ## 下一步 / 遗留

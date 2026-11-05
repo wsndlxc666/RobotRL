@@ -1,6 +1,6 @@
 #!/bin/bash
 set -eux
-A=/autodl-fs/data/robocasa365_assets
+A=/autodl-fs/data/artifacts/robocasa365/data/assets
 D=$A/_downloads
 mkdir -p "$A/objects" "$A/fixtures" "$A/objects/lightwheel"
 

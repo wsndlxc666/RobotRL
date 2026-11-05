@@ -17,7 +17,14 @@ say() { printf '\n\033[1m== %s ==\033[0m\n' "$*"; }
 fail=0
 
 say "0/5 前置检查"
-if pgrep -f "train_embodied_agent.py" >/dev/null 2>&1; then
+training_running() {
+  local pid
+  for pid in $(pgrep -f "train_embodied_agent.py" 2>/dev/null); do
+    [[ "$(cat /proc/$pid/comm 2>/dev/null)" == "python"* ]] && return 0
+  done
+  return 1
+}
+if training_running; then
   echo "  ✗ 训练进程仍在运行,拒绝收尾"
   exit 3
 fi
@@ -27,7 +34,11 @@ if [[ -n "$(git -C "$LAB_ROOT" status --porcelain)" ]]; then
 fi
 
 say "1/5 目录迁移"
-bash "$LAB_ROOT/tools/migrate_layout.sh" --apply || fail=1
+if [[ -d /autodl-fs/data/artifacts && -d /root/autodl-tmp/code ]]; then
+  echo "  - 已迁移过(artifacts/ 与 code/ 都存在),跳过,只做体检"
+else
+  bash "$LAB_ROOT/tools/migrate_layout.sh" --apply || fail=1
+fi
 
 say "2/5 体检"
 bash "$LAB_ROOT/tools/migrate_layout.sh" verify || fail=1

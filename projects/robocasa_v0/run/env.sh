@@ -1,6 +1,6 @@
 # FlowSDE on pi0.5 + RoboCasa
 export RCAS_HOME=/root/autodl-tmp/robocasa_rl
-export REPO_PATH=/root/autodl-tmp/RLinf
+export REPO_PATH=/root/autodl-tmp/code/RLinf
 export RCAS_MODELS=/root/autodl-fs/robocasa/models
 export RCAS_CKPT=/root/autodl-fs/robocasa/ckpt
 export RCAS_LOGS=/root/autodl-tmp/robocasa_rl/logs

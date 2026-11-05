@@ -1,36 +1,49 @@
 # 当前状态
 
-**更新时间**: 2026-11-04 22:45
-**阶段**: P3/P4/P5 并行中
-**一句话**: 7 任务 baseline 已跑过一轮(n=6),数字方差极大;OpenDrawer 正在跑 FlowSDE 训练。
+**更新时间**: 2026-11-05 09:15
+**阶段**: P5 训练完成(有缺陷),P6 待做
+**一句话**: FlowSDE 训练跑满 120 步,但末尾 ckpt 因爆盘损坏;eval 全部 n=10,无法判断提升。可用权重 = step_100。
 
-## Baseline 数字(pi05_pretrain_human300-75k)
+## 最新数字
 
-| 任务 | n | success_once | 备注 |
-|---|---|---|---|
-| PickPlaceCounterToCabinet | 6 | 1.000 | 疑似任务过易 |
-| SlideDishwasherRack | 6 | 1.000 | 疑似任务过易 |
-| OpenDrawer | 48 | 0.167 | 同一任务 n=12 时为 0.417,**方差大/口径不一致** |
-| PickPlaceDrawerToCounter | 6 | 0.167 | |
-| CloseToasterOvenDoor | 6 | 0.000 | |
-| CoffeeSetupMug | 6 | 0.000 | |
-| TurnOnMicrowave | 6 | 0.000 | |
+| 项 | 值 |
+|---|---|
+| 训练时长 | 6h50m(2026-11-04 23:00 → 11-05 05:50) |
+| 迭代 | 119 / 120 |
+| 完整 ckpt | step 20/40/60/80/100 |
+| 损坏 ckpt | step 120(磁盘写满) |
+| eval 成功率(n=10) | 均值 0.483,末次 0.80,step_99 时 0.30 |
+| 训练成功率(8 env) | 均值 0.466,无趋势 |
+| critic explained_variance | -6.62 → 0.76 |
+| actor ratio_abs | 0.026(几乎没更新) |
 
-> ⚠️ OpenDrawer 的 0.417(n=12)vs 0.167(n=48)差异需要先查明原因再谈训练提升,
-> 否则后续对比没有意义。
+## 判断
 
-## 正在进行
-
-- `robocasa365_flowsde_opendrawer_pi05` 训练中(22:43 启动)
-  - 日志:`/root/autodl-tmp/RLinf/logs/20261104-22:43:43-robocasa365_flowsde_opendrawer_pi05/`
-
-## 下一步
-
-- [ ] 等训练跑完,按 exp-report 出报告
-- [ ] 统一评测口径,重测 OpenDrawer(n ≥ 48,固定 ckpt)
-- [ ] 过滤掉 1.0 的"过易任务",避免虚高
-- [ ] 清理 `_downloads/*.zip`(11G)
+- **不能说训练有提升**:末次 0.8 是 n=10 的 8/10,前一次 3/10,纯噪声范围。
+- **不能说训练失败**:策略几乎没动(ratio_abs 0.026),120 步更像预热。
+- critic 学到东西了(explained_variance 0.76)。
 
 ## 阻塞项
 
-- 显存:48 env 时 OOM,目前上限 32
+- fs 只剩 13G(94%),下次训练前必须先清理或把 ckpt 写到别处。
+- eval 口径与外部 baseline 不一致,不能直接比。
+
+## 下一步
+
+- [ ] 用与外部 baseline 相同口径(task_horizon,n≥48)复评 step_100
+- [ ] 修 ckpt 保存策略(save_interval 或 keep_last_n)
+- [ ] eval 的 n 提到 ≥48
+- [ ] 查 `eval/return` 与 `eval/success_once` 数值完全相同的 bug
+- [ ] 清理可回收空间(assets 源 zip 约 19G)
+
+## 历史:7 任务 baseline(n=6,已作废)
+
+| 任务 | n | success_once |
+|---|---|---|
+| PickPlaceCounterToCabinet | 6 | 1.000 |
+| SlideDishwasherRack | 6 | 1.000 |
+| OpenDrawer | 48 | 0.167(与 n=12 的 0.417 矛盾) |
+| PickPlaceDrawerToCounter | 6 | 0.167 |
+| CloseToasterOvenDoor / CoffeeSetupMug / TurnOnMicrowave | 6 | 0.000 |
+
+详见 `runs/20261104_eval_baseline_7tasks/REPORT.md`。

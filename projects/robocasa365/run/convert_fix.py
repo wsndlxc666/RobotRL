@@ -1,5 +1,5 @@
 import pathlib, sys
-sys.path.insert(0, "/root/autodl-tmp/RLinf")
+sys.path.insert(0, "/root/autodl-tmp/code/RLinf")
 import torch
 from rlinf.utils.ckpt_convertor.openpi.jax_to_openpi import (
     _load_jax_params,
@@ -23,8 +23,8 @@ def unwrap(x):
 
 
 def main():
-    inp = pathlib.Path("/autodl-fs/data/robocasa365/models/pi05_pretrain_human300/multitask_learning/75000")
-    out = pathlib.Path("/autodl-fs/data/robocasa365/models/pi05_robocasa365_openpi")
+    inp = pathlib.Path("/autodl-fs/data/artifacts/robocasa365/models/pi05_pretrain_human300/multitask_learning/75000")
+    out = pathlib.Path("/autodl-fs/data/artifacts/robocasa365/models/pi05_robocasa365_openpi")
     ns = inp / "assets" / "norm_stats.json"
     out.mkdir(parents=True, exist_ok=True)
     print("loading jax params...", flush=True)

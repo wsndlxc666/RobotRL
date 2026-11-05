@@ -41,7 +41,14 @@ for p in /autodl-fs/data/lab /autodl-fs/data/artifacts; do
 done
 
 # 3. 没有仍在跑的训练
-if pgrep -f "train_embodied_agent.py" >/dev/null 2>&1; then
+training_running() {
+  local pid
+  for pid in $(pgrep -f "train_embodied_agent.py" 2>/dev/null); do
+    [[ "$(cat /proc/$pid/comm 2>/dev/null)" == "python"* ]] && return 0
+  done
+  return 1
+}
+if training_running; then
   echo "!! 训练仍在运行,不关机"; exit 1
 fi
 echo "  ✓ 无训练进程"

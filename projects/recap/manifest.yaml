@@ -8,7 +8,7 @@ objective: >
   在 LIBERO-10 Task0 上超过 few-shot 基线(官方参考 48.8% → 66.5%)。
 
 code:
-  - path: /root/autodl-tmp/RLinf
+  - path: /root/autodl-tmp/code/RLinf
     origin: https://github.com/RLinf/RLinf
     commit: 0067f7d5ce525c18bda439ed8dbb638abafd6a06
     note: shallow clone (grafted)
@@ -18,29 +18,29 @@ code:
     note: 在系统盘;仅用于参考实现与 tokenizer
 
 env:
-  venv: /root/autodl-tmp/RLinf/.venv
+  venv: /root/autodl-tmp/code/RLinf/.venv
   python: "3.11"
   rebuild: 见 PLAN.md 的 Phase 1
-  activate: source /root/autodl-tmp/RLinf/.venv/bin/activate
+  activate: source /root/autodl-tmp/code/RLinf/.venv/bin/activate
 
 models:
   - name: pi05_base_openpi
-    path: /autodl-fs/data/recap/models/pi05_base_openpi
+    path: /autodl-fs/data/artifacts/shared/models/pi05_base_openpi
     role: base
   - name: pi05_base_pytorch
-    path: /autodl-fs/data/recap/models/pi05_base_pytorch
+    path: /autodl-fs/data/artifacts/shared/models/pi05_base_pytorch
     role: base
   - name: siglip2-so400m-patch14-224
-    path: /autodl-fs/data/recap/models/siglip2-so400m-patch14-224
+    path: /autodl-fs/data/artifacts/shared/models/siglip2-so400m-patch14-224
     role: value_backbone
   - name: gemma-3-270m
-    path: /autodl-fs/data/recap/models/gemma-3-270m
+    path: /autodl-fs/data/artifacts/shared/models/gemma-3-270m
     role: value_backbone
   - name: RLinf-Pi05-LIBERO-SFT-normstats
-    path: /autodl-fs/data/recap/models/RLinf-Pi05-LIBERO-SFT-normstats
+    path: /autodl-fs/data/artifacts/shared/models/RLinf-Pi05-LIBERO-SFT-normstats
     role: norm_stats
   - name: recap_fromsft_step1500
-    path: /autodl-fs/data/recap/models/recap_fromsft_step1500
+    path: /autodl-fs/data/artifacts/recap/models/recap_fromsft_step1500
     role: result_ckpt
 
 data:
@@ -55,7 +55,6 @@ entrypoints:
 
 artifacts:
   root: /autodl-fs/data/recap
-  planned_root: /autodl-fs/data/artifacts/recap   # 待迁移
   big_file_threshold: 50MB
 
 runs: []

@@ -1,6 +1,6 @@
 # RECAP repro — shared paths (source this in every run script)
-export RECAP_REPO=/root/autodl-tmp/RLinf
-export REPO_PATH=/root/autodl-tmp/RLinf
+export RECAP_REPO=/root/autodl-tmp/code/RLinf
+export REPO_PATH=/root/autodl-tmp/code/RLinf
 export DS=/root/autodl-tmp/recap_data/RECAP-Libero10-Task0-48succ-Data
 export SFT=$DS/libero10_task0_sft
 export ROLL=$DS/libero10_task0_train

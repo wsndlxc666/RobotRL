@@ -1,7 +1,7 @@
 # FlowSDE 在线 RL 复现报告（π0.5 + RoboCasa CloseDrawer）
 
 **日期**：2026-11-03
-**框架**：RLinf（commit `0067f7d`，`/root/autodl-tmp/RLinf`）
+**框架**：RLinf（commit `0067f7d`，`/root/autodl-tmp/code/RLinf`）
 **算法**：FlowSDE（`noise_method="flow_sde"`）+ PPO
 **模型**：π0.5（openpi PyTorch），RoboCasa SFT checkpoint
 **任务**：RoboCasa v0.2，`CloseDrawer`（PandaOmron 移动机械臂）
@@ -61,7 +61,7 @@ PPO 超参：`lr=5e-6`，`value_lr=1e-4`，`gamma=0.99`，`gae_lambda=0.95`，
 
 | 项 | 值 |
 |---|---|
-| Python | 3.11.14（UV venv 副本 `/root/autodl-tmp/RLinf/.venv-robocasa`） |
+| Python | 3.11.14（UV venv 副本 `/root/autodl-tmp/code/RLinf/.venv-robocasa`） |
 | torch | 2.11.0+cu130 |
 | robosuite / mujoco | 1.5.1 / 3.2.6（robocasa 0.2.0 的固定版本） |
 | RoboCasa 代码 | RLinf fork `https://github.com/RLinf/robocasa.git`（v0.2 结构） |
@@ -208,7 +208,7 @@ step90 独有 5 个（McNemar/Fisher p≈0.48，不显著）。
 ```bash
 # 0) 环境（已就绪）
 source /root/autodl-tmp/robocasa_rl/env.sh
-cd /root/autodl-tmp/RLinf
+cd /root/autodl-tmp/code/RLinf
 
 # 1) 环境冒烟
 MUJOCO_GL=egl PYOPENGL_PLATFORM=egl ./.venv-robocasa/bin/python \

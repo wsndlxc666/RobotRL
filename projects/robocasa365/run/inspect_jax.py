@@ -1,8 +1,8 @@
 import sys, json, pathlib
-sys.path.insert(0, "/root/autodl-tmp/RLinf")
+sys.path.insert(0, "/root/autodl-tmp/code/RLinf")
 from rlinf.utils.ckpt_convertor.openpi.jax_to_openpi import _load_jax_params
 
-ck = "/autodl-fs/data/robocasa365/models/pi05_pretrain_human300/multitask_learning/75000"
+ck = "/autodl-fs/data/artifacts/robocasa365/models/pi05_pretrain_human300/multitask_learning/75000"
 p = _load_jax_params(ck)
 print("top keys", list(p.keys())[:20], flush=True)
 

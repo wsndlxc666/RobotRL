@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 export UV_DEFAULT_INDEX=http://mirrors.aliyun.com/pypi/simple
-VENV=/root/autodl-tmp/RLinf/.venv
-NEW=/root/autodl-tmp/RLinf/.venv-robocasa
+VENV=/root/autodl-tmp/code/RLinf/.venv
+NEW=/root/autodl-tmp/code/RLinf/.venv-robocasa
 echo "[$(date)] cloning venv..."
 if [ ! -x "$NEW/bin/python" ]; then
   cp -a --reflink=auto "$VENV" "$NEW"

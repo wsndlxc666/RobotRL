@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 export UV_DEFAULT_INDEX=http://mirrors.aliyun.com/pypi/simple
-NEW=/root/autodl-tmp/RLinf/.venv-robocasa
+NEW=/root/autodl-tmp/code/RLinf/.venv-robocasa
 cd "$NEW/robocasa"
 echo "[$(date)] uv pip install ..."
 "$NEW/bin/uv" pip install --python "$NEW/bin/python" -e . 2>&1 | tail -40
