@@ -1,8 +1,8 @@
 # Robometer 40 步 pilot — 当前状态
 
-**更新时间**: 2026-11-05 21:10
-**状态**: 运行中（step 7/40）
-**预计完成**: 2026-11-05 23:20 左右
+**更新时间**: 2026-11-05 23:38
+**状态**: 已完成（40/40）
+**结果**: rb20 = 0.18 (9/50)，rb40 = 0.12 (6/50)；对照组 A 的 step20/40 = 0.18/0.22
 
 ## 已完成
 
@@ -43,3 +43,12 @@
 | 补丁 | `patches/robometer_integration.patch` |
 | 原始日志 | `/root/autodl-tmp/projects/robocasa365/logs/robometer40.out` |
 | ckpt | `.../logs/robocasa365_flowsde_opendrawer_pi05_robometer40/checkpoints/`（step20/40，待生成） |
+
+## 最终结果
+
+| 组 | step20 | step40 |
+|---|---|---|
+| A 二值 GT | 0.18 (9/50) | 0.22 (11/50) |
+| B Robometer | 0.18 (9/50) | **0.12 (6/50)** |
+
+结论：40 步 pilot 没有带来提升，step40 反而更低。按用户指示不纠结 pilot 结果，直接启动 120 步完整训练（`20261106_robometer120`）。

@@ -1,0 +1,17 @@
+{
+ "rb20": {
+  "success_once": 0.18,
+  "successes": 9,
+  "n": 50
+ },
+ "rb40": {
+  "success_once": 0.12,
+  "successes": 6,
+  "n": 50
+ },
+ "A_baseline": {
+  "sft": 0.2,
+  "step20": 0.18,
+  "step40": 0.22
+ }
+}

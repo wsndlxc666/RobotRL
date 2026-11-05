@@ -28,8 +28,8 @@
 | P6 | 历史 ckpt 统一 n=50 评测（SFT/20/40/60/80） | done |
 | P7 | 归档到魔搭 + 清理本地 | done |
 | P8 | 续跑 100→120 并评测 100/120 | done |
-| P9 | Robometer 稠密信用分配 + 40 步 pilot | in_progress |
-| P10 | A/B 对比 + 报告与结论 | pending |
+| P9 | Robometer 稠密信用分配 + 40 步 pilot | done |
+| P10 | A/B 对比 + 报告与结论 | done（120 步中止，出收尾报告） |
 
 ## 当前结论（2026-11-05）
 

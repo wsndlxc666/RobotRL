@@ -116,3 +116,20 @@
 **结论**: 接入链路可用;效果待 40 步跑完后的 n=50 对比
 **产出**: `runs/20261105_robometer_pilot40/`(PLAN/STATUS/config/patch)
 **下一步**: pilot 跑完 → step20/40 n=50 → 与 A 组对比 → 决定是否续 120
+
+---
+
+## 2026-11-06 — 收尾：视频 + 报告
+
+**目标**: 中止 Robometer 120 步训练，导出视频，出收尾报告并关机
+**计划**: ① 停训练/自动收尾 ② 导 3 条 SFT 视频 ③ 写 wrapup 报告 ④ push ⑤ shutdown
+**实际**:
+- 120 步 Robometer 训练在 step ~2 中止（用户决定），未产出 ckpt
+- 导出 3 条 SFT OpenDrawer 视频（4 env 拼屏）：
+  - seed 7：2/4；seed 11：1/4；seed 13：4/4
+- Robometer pilot 最终：step20 0.18 (9/50)、step40 0.12 (6/50)；对照组 0.18/0.22
+- 收尾报告：`runs/20261106_wrapup/REPORT.md`
+- 脚本归档到 `run/`（评测、上传、Robometer finalize）
+**结论**: 本轮结束；稀疏 RL 与 Robometer 40 步 pilot 都没有带来可测提升
+**产出**: 3 条视频 + wrapup 报告 + 更新的 STATUS/PLAN
+**下一步**: 项目暂停；若继续，先做 Robometer vs drawer qpos 的 sanity check
