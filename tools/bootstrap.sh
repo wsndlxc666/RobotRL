@@ -76,6 +76,18 @@ check_proj() {
 echo "lab bootstrap — $(date -Iseconds)"
 mkdir -p "$TMP/code"
 
+# ModelScope 凭据:从持久盘恢复(不打印 token)
+MS_SECRETS=/autodl-fs/data/.secrets/modelscope
+if [[ ! -s /root/.modelscope/credentials/git_token && -s "$MS_SECRETS/credentials/git_token" ]]; then
+  mkdir -p /root/.modelscope
+  cp -a "$MS_SECRETS/credentials" /root/.modelscope/
+  ok "modelscope 凭据已从 $MS_SECRETS 恢复"
+elif [[ -s /root/.modelscope/credentials/git_token ]]; then
+  ok "modelscope 凭据已存在"
+else
+  warn "modelscope 凭据缺失:modelscope login --token <token> 后备份到 $MS_SECRETS"
+fi
+
 if [[ "$TARGET" == "all" ]]; then
   for d in "$LAB_ROOT"/projects/*/; do check_proj "$(basename "$d")"; done
 else

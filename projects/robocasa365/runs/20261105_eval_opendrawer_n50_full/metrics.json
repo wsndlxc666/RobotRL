@@ -1,0 +1,86 @@
+[
+ {
+  "tag": "sft",
+  "step": 0,
+  "successes": 10,
+  "n": 50,
+  "rate": 0.2,
+  "wilson95": [
+   0.1124,
+   0.3304
+  ],
+  "model_path": "/autodl-fs/data/artifacts/robocasa365/models/pi05_robocasa365_openpi"
+ },
+ {
+  "tag": "step20",
+  "step": 20,
+  "successes": 9,
+  "n": 50,
+  "rate": 0.18,
+  "wilson95": [
+   0.0977,
+   0.308
+  ],
+  "model_path": "/autodl-fs/data/artifacts/robocasa365/ckpt/global_step_20/actor"
+ },
+ {
+  "tag": "step40",
+  "step": 40,
+  "successes": 11,
+  "n": 50,
+  "rate": 0.22,
+  "wilson95": [
+   0.1275,
+   0.3524
+  ],
+  "model_path": "/autodl-fs/data/artifacts/robocasa365/ckpt/global_step_40/actor"
+ },
+ {
+  "tag": "step60",
+  "step": 60,
+  "successes": 7,
+  "n": 50,
+  "rate": 0.14,
+  "wilson95": [
+   0.0695,
+   0.2619
+  ],
+  "model_path": "/root/autodl-tmp/projects/robocasa365/logs/20261104-23:00:07-robocasa365_flowsde_opendrawer_pi05/robocasa365_flowsde_opendrawer_pi05/checkpoints/global_step_60/actor"
+ },
+ {
+  "tag": "step80",
+  "step": 80,
+  "successes": 10,
+  "n": 50,
+  "rate": 0.2,
+  "wilson95": [
+   0.1124,
+   0.3304
+  ],
+  "model_path": "/root/autodl-tmp/projects/robocasa365/logs/20261104-23:00:07-robocasa365_flowsde_opendrawer_pi05/robocasa365_flowsde_opendrawer_pi05/checkpoints/global_step_80/actor"
+ },
+ {
+  "tag": "step100",
+  "step": 100,
+  "successes": 10,
+  "n": 50,
+  "rate": 0.2,
+  "wilson95": [
+   0.1124,
+   0.3304
+  ],
+  "model_path": "/root/autodl-tmp/projects/robocasa365/logs/20261104-23:00:07-robocasa365_flowsde_opendrawer_pi05/robocasa365_flowsde_opendrawer_pi05/checkpoints/global_step_100/actor"
+ },
+ {
+  "tag": "step120",
+  "step": 120,
+  "successes": 13,
+  "n": 50,
+  "rate": 0.26,
+  "wilson95": [
+   0.1587,
+   0.3955
+  ],
+  "model_path": "/root/autodl-tmp/projects/robocasa365/logs/robocasa365_flowsde_opendrawer_pi05_resume100/checkpoints/global_step_120/actor"
+ }
+]

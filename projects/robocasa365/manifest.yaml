@@ -4,12 +4,15 @@ status: active
 
 objective: >
   在 RoboCasa365(robocasa 1.0.1 + RLinf)上把 pi0.5 评测管线跑通,
-  建立 baseline,再推进到 FlowSDE 在线微调。
+  建立可比的 baseline,推进 FlowSDE 在线微调,并用 Robometer 的稠密
+  progress 奖励改善长程任务的信用分配。
 
 code:
   - path: /root/autodl-tmp/code/RLinf
     origin: https://github.com/RLinf/RLinf
     commit: 0067f7d5ce525c18bda439ed8dbb638abafd6a06
+    patches:
+      - runs/20261105_robometer_pilot40/patches/robometer_integration.patch
   - path: /root/autodl-tmp/code/robocasa365
     origin: https://github.com/robocasa/robocasa
     commit: 3443cdf3dd20f9ae8ed41adba442059b506891d0
@@ -18,6 +21,9 @@ code:
     origin: https://github.com/ARISE-Initiative/robosuite
     commit: 5ce6643f3092639d08f7b0f90ed1c6a84f50552c
     note: 365 需要 master 版 robosuite
+  - path: /root/autodl-tmp/code/robometer
+    origin: https://github.com/robometer/robometer
+    note: vendor 的 Robometer 代码;通过 ghproxy 克隆
 
 env:
   venv: /root/autodl-tmp/code/RLinf/.venv-robocasa365
@@ -29,6 +35,11 @@ env:
     MUJOCO_GL: egl
     PYOPENGL_PLATFORM: egl
     NUMBA_DISABLE_JIT: "1"
+    HF_ENDPOINT: https://hf-mirror.com
+  pinned:
+    transformers: 4.57.6
+    numpy: 2.2.5
+    torch: 2.11.0+cu130
 
 models:
   - name: pi05_pretrain_human300_75k
@@ -40,6 +51,12 @@ models:
     path: /autodl-fs/data/artifacts/robocasa365/models/pi05_robocasa365_openpi
     role: policy
     source: hf://robocasa/robocasa365_checkpoints
+  - name: robometer-4b
+    path: /root/autodl-tmp/models/robometer-4B
+    role: reward_model
+    source: hf://robometer/Robometer-4B
+    size: 8.90G
+    note: Qwen3-VL-4B + progress/success/preference heads;冻结推理
 
 data:
   - name: robocasa365_assets
@@ -54,6 +71,11 @@ entrypoints:
   download: projects/robocasa365/run/dl_365.sh
   unpack: projects/robocasa365/run/unpack_365.sh
   eval: projects/robocasa365/run/run_task_eval.sh
+  eval_n50: projects/robocasa365/run/eval_sweep_n50.sh
+  eval_final: projects/robocasa365/run/eval_final_n50.sh
+  upload: projects/robocasa365/run/upload_modelscope.sh
+  train_resume100: examples/embodiment/config/robocasa365_flowsde_opendrawer_pi05_resume100.yaml
+  train_robometer40: examples/embodiment/config/robocasa365_flowsde_opendrawer_pi05_robometer40.yaml
   readme: projects/robocasa365/run/README.md
 
 eval_tasks:
@@ -64,6 +86,28 @@ eval_tasks:
   - TurnOnMicrowave
   - CloseToasterOvenDoor
   - CoffeeSetupMug
+
+eval_protocol:
+  task_filter: OpenDrawer
+  episode_horizon_source: task_horizon
+  max_steps_per_rollout_epoch: 1500
+  n: 50
+  envs: 25
+  rollout_epoch: 2
+  seed: 7
+
+archive:
+  backend: modelscope
+  repo: wsndlxc666/robocasa365-opendrawer-flowsde-pi05
+  visibility: private
+  contents:
+    global_step_20: weights_only
+    global_step_40: weights_only
+    global_step_60: weights_only
+    global_step_80: weights_only
+    global_step_100: weights_only
+    global_step_120: full (weights + dcp)
+  local_after_upload: 20/40/60/80 deleted; 100/120 kept
 
 artifacts:
   root: /autodl-fs/data/artifacts/robocasa365
@@ -78,3 +122,16 @@ runs:
     stage: train
     date: 2026-11-04
     headline: 120 步 FlowSDE 训练完成,末尾 ckpt 因爆盘损坏;eval n=10 不足以判断提升
+  - id: 20261105_eval_opendrawer_n50_full
+    stage: eval
+    date: 2026-11-05
+    headline: 7 个 ckpt 统一 n=50;无趋势,step120 0.26 vs SFT 0.20(p=0.635)
+  - id: 20261105_train_step120_resume
+    stage: train
+    date: 2026-11-05
+    headline: 从 step100 续跑 20 步补全 step120;20 步权重仅变 0.009%
+  - id: 20261105_robometer_pilot40
+    stage: train
+    date: 2026-11-05
+    status: in_progress
+    headline: Robometer 稠密 progress 奖励接入 RLinf,40 步 pilot;A/B 对比进行中

@@ -13,6 +13,7 @@
 | pi05_robocasa_100demos_s30000 | `/autodl-fs/data/robocasa/models/pi05_robocasa_100demos_s30000` | RoboCasa v0 策略 | hf | 7.0G |
 | pi05_pretrain_human300 | `/autodl-fs/data/robocasa365/models/pi05_pretrain_human300` | RoboCasa365 策略 | hf://robocasa/robocasa365_checkpoints | 12G |
 | pi05_robocasa365_openpi | `/autodl-fs/data/robocasa365/models/pi05_robocasa365_openpi` | RoboCasa365 openpi 格式 | hf://robocasa/robocasa365_checkpoints | 13G |
+| robometer-4b | `/root/autodl-tmp/models/robometer-4B` | 逐帧 progress/success 奖励模型（冻结） | hf://robometer/Robometer-4B（hf-mirror） | 8.9G |
 
 ## 待办
 

@@ -67,3 +67,52 @@
 **结论**: 结构统一完成,`/root/autodl-tmp` 根目录只剩 code/projects/cache
 **产出**: `https://github.com/wsndlxc666/RobotRL`
 **下一步**: 下次开机先跑 `tools/bootstrap.sh all`
+
+---
+
+## 2026-11-05 — step_120 补全 + 全量 n=50 评测
+
+**目标**: 补全昨天爆盘损坏的 step_120;用统一口径评测 SFT/20/40/60/80/100/120
+**计划**: ① 用 step_100 带 dcp 续跑 20 步 ② 校验 ckpt ③ 每档 n=50 评测 ④ 出曲线
+**实际**:
+- 从 `global_step_100` 续跑 101–120,66 分钟完成;`global_step_120` 三件套齐全(dcp 9.18G + 权重 6.96G)
+- 101–120:ratio_abs 均值 0.0269、grad_norm 8.75、critic EV 0.671
+- n=50:SFT 0.20 / 20 0.18 / 40 0.22 / 60 0.14 / 80 0.20 / 100 0.20 / 120 0.26
+- step120 vs SFT:Fisher p=0.635,不显著
+- 权重变化:SFT→120 0.169%,100→120 0.009%;变化主要在 value_head bias
+**结论**: 120 步内 actor 几乎没动,评测在 SFT 附近波动;稀疏终局奖励是根因
+**产出**: `runs/20261105_eval_opendrawer_n50_full/`、`runs/20261105_train_step120_resume/`
+**下一步**: 接 Robometer 稠密 progress 奖励
+
+---
+
+## 2026-11-05 — 魔搭归档 + 本地清理
+
+**目标**: 把历史 ckpt 传到 ModelScope,释放本地磁盘
+**计划**: ① 建私有 repo ② 传 20/40/60/80/100 权重 ③ 传 120 完整目录 ④ 核对大小 ⑤ 删本地
+**实际**:
+- repo:`wsndlxc666/robocasa365-opendrawer-flowsde-pi05`(private)
+- 20/40/60/80/100 只传 `full_weights.pt`;120 传权重 + dcp
+- 远端 7 个文件大小与本地逐字节一致
+- 本地删除 20–80(释放 tmp 30G + fs 30G);100/120 保留
+- 实测上传约 13 MB/s
+- 凭据持久化到 `/autodl-fs/data/.secrets/modelscope/`,bootstrap 自动恢复
+**结论**: 归档完成,本地磁盘压力解除
+**产出**: ModelScope repo + `run/upload_modelscope.sh`
+**下一步**: 后续 120 步 Robometer 训练完成后同样归档
+
+---
+
+## 2026-11-05 — Robometer 接入 + 40 步 pilot
+
+**目标**: 用 Robometer 的逐帧 progress 做稠密信用分配,对比二值 GT success
+**计划**: ① 下模型/装代码 ② 最小 loader ③ 接 RLinf history_buffer ④ 1 步 smoke ⑤ 40 步 pilot
+**实际**:
+- Robometer-4B 下载完成(8.90G),最小 loader missing=0 / unexpected=6
+- 新增 `RobometerRewardModel`,注册 `robometer`;修 `input_interval>1` 的 history 边界 bug
+- 1 iteration smoke 通过:167s、奖励非零、无 OOM
+- 40 步 pilot 20:40 启动,step 7/40;ratio_abs 0.022–0.028(与稀疏版持平,符合 advantage 归一化预期)
+- 依赖事故:sentence-transformers 误升级 transformers/numpy,已回滚到 4.57.6 / 2.2.5,RLinf 冒烟通过
+**结论**: 接入链路可用;效果待 40 步跑完后的 n=50 对比
+**产出**: `runs/20261105_robometer_pilot40/`(PLAN/STATUS/config/patch)
+**下一步**: pilot 跑完 → step20/40 n=50 → 与 A 组对比 → 决定是否续 120
